@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import supabase from "../config/supabaseClient";
 import Card from "../components/Card";
 import Skeleton from "../components/Skeleton";
+import { useNavigate } from "react-router-dom";
 
 const Home = () => {
   const [loading, setLoading] = useState(true);
@@ -11,6 +12,8 @@ const Home = () => {
 
   const [error, setError] = useState(null);
   const [questions, setQuestions] = useState(null);
+
+  const navigate = useNavigate()
 
   useEffect(() => {
     const fetchQuestions = async () => {
@@ -53,8 +56,15 @@ const Home = () => {
     setInputValue(e.target.value);
   };
 
+  function handleLogout() {
+    sessionStorage.removeItem('token')
+    navigate('/')
+
+  }
+
   return (
     <>
+    <button className="bg-gray-300 p-2 mt-2 ml-3 rounded" onClick={handleLogout}>log out</button>
       <section className="flex flex-col min-h-screen items-center pt-[5rem] self-center gap-4">
       <h1>search</h1>
       <input
