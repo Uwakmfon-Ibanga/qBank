@@ -4,7 +4,7 @@ import Card from "../components/Card";
 import Skeleton from "../components/Skeleton";
 import { useNavigate } from "react-router-dom";
 
-const Home = () => {
+const Home = ({}) => {
   const [loading, setLoading] = useState(true);
 
   const [inputValue, setInputValue] = useState("");
@@ -50,6 +50,7 @@ const Home = () => {
     };
 
     fetchQuestions();
+    
   }, [inputValue]);
 
   const handleChange = (e) => {
@@ -61,11 +62,14 @@ const Home = () => {
     navigate('/')
 
   }
+  // console.log(user);
+  
 
   return (
     <>
     <button className="bg-gray-300 p-2 mt-2 ml-3 rounded" onClick={handleLogout}>log out</button>
       <section className="flex flex-col min-h-screen items-center pt-[5rem] self-center gap-4">
+        {/* <h1>welcom {user.id}</h1> */}
       <h1>search</h1>
       <input
         className="bg-gray-100 border-2"
@@ -79,9 +83,9 @@ const Home = () => {
       {error && <p>{error}</p>}
 
       {questions && (
-        <div className="flex gap-6">
-          {questions.map((question) => (
-            <Card question={question} />
+        <div className="grid grid-cols-2 gap-3 p-3">
+          {questions.map((question, id) => (
+            <Card question={question} key={id}/>
           ))}
         </div>
       )}

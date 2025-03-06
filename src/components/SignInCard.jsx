@@ -22,7 +22,6 @@ const SignInCard = ({setToken}) => {
         });
   
         if (data.session) {
-          console.log(data.session)
           setToken(data)
           navigate('/home')
         }
@@ -44,20 +43,10 @@ const SignInCard = ({setToken}) => {
   return (
     <form
           onSubmit={handleSubmit}
-          className="flex flex-col w-[30%] shadow-lg p-[40px] gap-6 border-2 border-gray-200"
+          className="flex flex-col w-[70%] shadow-lg p-[20px] gap-6 border-2 border-gray-200"
         >
-          <h2 className="text-gray-500     text-center text-3xl">Sign-in    Here</h2>
+          <h2 className="text-gray-500     text-center text-3xl">Sign-in  Here</h2>
     
-          <input
-            className="bg-gray-200 p-2"
-            type="email"
-            placeholder="username"
-            value={email}
-            onChange={(e) => {
-              setEmail(e.target.value);
-            }}
-            required
-          />
           <input
             className="bg-gray-200 p-2"
             type="email"
@@ -106,7 +95,7 @@ const SignInCard = ({setToken}) => {
           </button>
 
           <div>
-                <p className="text-gray-500 text-center">
+                <p className="text-gray-500 text-center text-sm">
                   Don't have an account?{" "}
                   <Link to={'/'} className="text-blue-500 underline">Sign Up</Link>
                 </p>

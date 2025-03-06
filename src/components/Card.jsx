@@ -7,7 +7,6 @@ const Card = ({question}) => {
     // Generate public URL for the image
   const getPublicImageUrl = (path) => {
     const { data } = supabase.storage.from("cms-images").getPublicUrl(path);
-    console.log(data.publicUrl);
     // return data.publicUrl;
     return `${data.publicUrl}?t=${new Date().getTime()}`;
 
@@ -21,7 +20,6 @@ const Card = ({question}) => {
               <p>{question.courseCode}</p>
               <p>{question.courseLecturer}</p>
               <p>{question.year}</p>
-              {console.log("Image Path:", question.image_url)}
             </div>
   )
 }

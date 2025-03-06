@@ -46,7 +46,7 @@ const SignUpCard = ({setToken}) => {
   return (
     <form
       onSubmit={handleSignUp}
-      className="flex flex-col w-[30%] shadow-lg p-[80px] gap-6 border-2 border-gray-200"
+      className="flex flex-col w-[70%] shadow-lg p-[20px] gap-6 border-2 border-gray-200"
     >
       <h2 className="text-gray-500     text-center text-3xl">Sign Up Here</h2>
 
@@ -96,7 +96,7 @@ const SignUpCard = ({setToken}) => {
       </button>
 
       <div>
-                <p className="text-gray-500 text-center">
+                <p className="text-gray-500 text-center text-sm">
                   Don't have an account?{" "}
                   <Link to={"/signin"} className="text-blue-500 underline">Sign-in</Link>
                 </p>

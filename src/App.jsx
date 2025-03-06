@@ -14,6 +14,10 @@ function App() {
     return storedToken ? JSON.parse(storedToken) : false;
   });
   const [session, setSession] = useState(null);
+  const [user, setUser] = useState(() => {
+    const storedUser = sessionStorage.getItem("user");
+    return storedUser ? JSON.parse(storedUser) : null;
+  });
 
   const navigate = useNavigate()
 
@@ -31,6 +35,11 @@ function App() {
         console.error("Error getting session:", error);
         return;
       }
+      if (data.session) {
+        setSession(data.session);
+        setUser(data.session.user);
+        setToken(data.session.access_token);
+      }
     };
 
     checkUser();
@@ -39,21 +48,23 @@ function App() {
     const { data: listener } = supabase.auth.onAuthStateChange((event, session) => {
       setSession(session);
       if (session) {
-        setToken(session.access_token);
-    navigate("/home");
+        setToken(session.access_token  || null);
+        setUser(session.user); // Store new user info when logged in
+      } else {
+        setUser(null);
+    navigate("/signin");
       }
     });
 
     return () => {
       listener.subscription.unsubscribe();
     };
-  }, [navigate, session]);
-
+  }, [navigate]);
 
   return (
     <Routes>
       
-      {token && <Route path="/home" element={<Home />} />}
+      {token && <Route path="/home" element={<Home user={user} />} />}
       <Route path="/signin" element={<SignIn setToken={setToken} />} />
       <Route path="/" element={<SignUp setToken={setToken} />} />
       {/* <Route path="*" element={<PageNotFound />} />  */}
