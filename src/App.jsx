@@ -52,7 +52,9 @@ function App() {
         setUser(session.user); // Store new user info when logged in
       } else {
         setUser(null);
-    navigate("/signin");
+      }
+      if (window.location.pathname !== "/") {
+        navigate("/signin");
       }
     });
 
