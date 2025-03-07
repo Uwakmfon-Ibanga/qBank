@@ -63,10 +63,9 @@ function App() {
 
   return (
     <Routes>
-      
+      <Route path="/" element={<SignUp setToken={setToken} />} />
       {token && <Route path="/home" element={<Home user={user} />} />}
       <Route path="/signin" element={<SignIn setToken={setToken} />} />
-      <Route path="/" element={<SignUp setToken={setToken} />} />
       {/* <Route path="*" element={<PageNotFound />} />  */}
     </Routes>
   );
