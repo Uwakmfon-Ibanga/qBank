@@ -5,7 +5,7 @@ import { FaGoogle } from "react-icons/fa";
 import supabase from "../config/supabaseClient";
 import { Link, useNavigate } from "react-router-dom";
 
-const SignInCard = ({setToken}) => {
+const SignInCard = () => {
     const [password, setPasspword] = useState("");
     const [email, setEmail] = useState("");
     const [showPassword, setShowPassword] = useState(false);
@@ -22,7 +22,6 @@ const SignInCard = ({setToken}) => {
         });
   
         if (data.session) {
-          setToken(data)
           navigate('/home')
         }
   

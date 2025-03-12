@@ -8,28 +8,20 @@ import Home from "./pages/Home";
 import SignIn from "./pages/SignIn";
 import SignUp from "./pages/SignUp";
 
-function App() {
-  const [token, setToken] = useState(() => {
-    const storedToken = sessionStorage.getItem("token");
-    return storedToken ? JSON.parse(storedToken) : false;
-  });
+function App  () {
   const [session, setSession] = useState(null);
-  const [user, setUser] = useState(() => {
-    const storedUser = sessionStorage.getItem("user");
-    return storedUser ? JSON.parse(storedUser) : null;
-  });
-
+  
   const navigate = useNavigate()
 
-  useEffect(() => {
-    if (token) {
-      sessionStorage.setItem("token", JSON.stringify(token));
-    }
-  }, [token])
 
   useEffect(() => {
     const checkUser = async () => {
-      const { data, error } = await supabase.auth.getSession();
+
+      const storedSession = sessionStorage.getItem("session");
+      if (storedSession) {
+        setSession(JSON.parse(storedSession));
+      } else {
+        const { data, error } = await supabase.auth.getSession();
 
       if (error) {
         console.error("Error getting session:", error);
@@ -37,24 +29,26 @@ function App() {
       }
       if (data.session) {
         setSession(data.session);
-        setUser(data.session.user);
-        setToken(data.session.access_token);
+        sessionStorage.setItem("session", JSON.stringify(data.session));
+      }
       }
     };
 
     checkUser();
+  }, []);
 
+
+
+  useEffect(() => {
     // Listen for auth state changes (e.g., user logs in/out)
     const { data: listener } = supabase.auth.onAuthStateChange((event, session) => {
-      setSession(session);
       if (session) {
-        setToken(session.access_token  || null);
-        setUser(session.user); // Store new user info when logged in
+        setSession(session);
+        sessionStorage.setItem("session", JSON.stringify(session));
       } else {
-        setUser(null);
-      }
-      if (window.location.pathname !== "/") {
-        navigate("/signin");
+        setSession(null);
+        sessionStorage.removeItem("session");
+        navigate("/signin"); 
       }
     });
 
@@ -65,9 +59,9 @@ function App() {
 
   return (
     <Routes>
-      <Route path="/" element={<SignUp setToken={setToken} />} />
-      {token && <Route path="/home" element={<Home user={user} />} />}
-      <Route path="/signin" element={<SignIn setToken={setToken} />} />
+      <Route path="/" element={<SignUp />} />
+      {session && <Route path="/home" element={<Home session={session} />} />}
+      <Route path="/signin" element={<SignIn  />} />
       {/* <Route path="*" element={<PageNotFound />} />  */}
     </Routes>
   );

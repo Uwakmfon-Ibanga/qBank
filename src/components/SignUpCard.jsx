@@ -5,7 +5,7 @@ import { FaGoogle } from "react-icons/fa";
 import supabase from "../config/supabaseClient";
 import { Link } from "react-router-dom";
 
-const SignUpCard = ({setToken}) => {
+const SignUpCard = () => {
   const [password, setPasspword] = useState("");
   const [email, setEmail] = useState("");
   const [showPassword, setShowPassword] = useState(false);
@@ -27,7 +27,6 @@ const SignUpCard = ({setToken}) => {
 
       if (data.session) {
         console.log(data.session)
-          setToken(data)
           navigate('/home')
       }
 
@@ -92,7 +91,7 @@ const SignUpCard = ({setToken}) => {
         className="bg-gray-200 p-2 w-fit self-end cursor-pointer"
         type="submit"
       >
-        Sign UP
+        Sign Up
       </button>
 
       <div>
