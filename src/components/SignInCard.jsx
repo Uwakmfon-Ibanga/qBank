@@ -42,12 +42,12 @@ const SignInCard = () => {
   return (
     <form
           onSubmit={handleSubmit}
-          className="flex flex-col w-[70%] shadow-lg p-[20px] gap-6 border-2 border-gray-200"
+          className="flex flex-col w-[70%] sm:w-[60%] lg:w-[40%] shadow-lg p-[20px] sm:px-[60px] gap-6 sm:gap-4 border-2 border-gray-200"
         >
           <h2 className="text-gray-500     text-center text-3xl">Sign-in  Here</h2>
     
           <input
-            className="bg-gray-200 p-2"
+            className="bg-gray-200 p-2 w-[13rem] sm:w-[21rem] self-center"
             type="email"
             placeholder="email"
             value={email}
@@ -57,9 +57,9 @@ const SignInCard = () => {
             required
           />
     
-          <div className="relative w-fit">
+          <div className="relative w-fit self-center">
             <input
-              className="bg-gray-200 p-2"
+              className="bg-gray-200 p-2 w-[13rem] sm:w-[21rem] self-center"
               type={showPassword ? "text" : "password"}
               placeholder="password"
               value={password}
