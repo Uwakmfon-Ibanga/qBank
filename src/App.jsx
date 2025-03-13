@@ -48,8 +48,10 @@ function App  () {
       } else {
         setSession(null);
         sessionStorage.removeItem("session");
-        navigate("/signin"); 
       }
+      if (window.location.pathname === "/home") {
+        navigate("/signin");
+      } 
     });
 
     return () => {
