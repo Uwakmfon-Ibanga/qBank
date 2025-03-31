@@ -13,7 +13,6 @@ function App  () {
   
   const navigate = useNavigate()
 
-
   useEffect(() => {
     const checkUser = async () => {
 
@@ -35,8 +34,7 @@ function App  () {
     };
 
     checkUser();
-  }, []);
-
+  }, [navigate]);
 
 
   useEffect(() => {
@@ -45,13 +43,15 @@ function App  () {
       if (session) {
         setSession(session);
         sessionStorage.setItem("session", JSON.stringify(session));
+        // Redirect to /home ONLY if the user just signed in
+      if (event === "SIGNED_IN") {
+        navigate("/home");
+      }
       } else {
         setSession(null);
         sessionStorage.removeItem("session");
-      }
-      if (window.location.pathname === "/home") {
         navigate("/signin");
-      } 
+      }
     });
 
     return () => {
@@ -61,8 +61,8 @@ function App  () {
 
   return (
     <Routes>
-      <Route path="/" element={<SignUp />} />
-      {session && <Route path="/home" element={<Home session={session} />} />}
+      <Route path="/" element={session ? <Home /> : <SignIn />} />
+      {session && <Route path="/home" element={<Home session={session} />}  />}
       <Route path="/signin" element={<SignIn  />} />
       {/* <Route path="*" element={<PageNotFound />} />  */}
     </Routes>
