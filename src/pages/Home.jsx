@@ -59,7 +59,7 @@ const Home = ({session}) => {
 
   function handleLogout() {
     sessionStorage.removeItem('token')
-    navigate('/')
+    navigate('/signin')
 
   }
   
