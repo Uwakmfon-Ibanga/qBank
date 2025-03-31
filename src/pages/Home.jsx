@@ -4,16 +4,17 @@ import Card from "../components/Card";
 import Skeleton from "../components/Skeleton";
 import { useNavigate } from "react-router-dom";
 
-const Home = ({session}) => {
+const Home = ({ session }) => {
   const [loading, setLoading] = useState(true);
 
   const [inputValue, setInputValue] = useState("");
-  console.log(session)
+  console.log(session);
 
   const [error, setError] = useState(null);
   const [questions, setQuestions] = useState(null);
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
 
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchQuestions = async () => {
@@ -50,45 +51,51 @@ const Home = ({session}) => {
     };
 
     fetchQuestions();
-    
   }, [inputValue]);
 
   const handleChange = (e) => {
     setInputValue(e.target.value);
   };
 
-  function handleLogout() {
-    sessionStorage.removeItem('token')
-    navigate('/signin')
-
-  }
-  
+  const handleLogout = async () => {
+    setIsLoggingOut(true);
+    try {
+      await supabase.auth.signOut();
+    } finally {
+      setIsLoggingOut(false);
+    }
+  };
 
   return (
     <>
-    <button className="bg-gray-300 p-2 mt-2 ml-3 rounded" onClick={handleLogout}>log out</button>
+      <button
+        className="bg-gray-300 p-2 mt-2 ml-3 rounded"
+        onClick={handleLogout}
+      >
+        log out
+      </button>
       <section className="flex flex-col min-h-screen items-center pt-[5rem] self-center gap-4">
         <h1>welcome {session.user.email}</h1>
-      <h1>search</h1>
-      <input
-        className="bg-gray-100 border-2"
-        type="text"
-        value={inputValue}
-        onChange={handleChange}
-      />
+        <h1>search</h1>
+        <input
+          className="bg-gray-100 border-2"
+          type="text"
+          value={inputValue}
+          onChange={handleChange}
+        />
 
-      {loading && <Skeleton />}
+        {loading && <Skeleton />}
 
-      {error && <p>{error}</p>}
+        {error && <p>{error}</p>}
 
-      {questions && (
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 p-3">
-          {questions.map((question, id) => (
-            <Card question={question} key={id}/>
-          ))}
-        </div>
-      )}
-    </section>
+        {questions && (
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 p-3">
+            {questions.map((question, id) => (
+              <Card question={question} key={id} />
+            ))}
+          </div>
+        )}
+      </section>
     </>
   );
 };
