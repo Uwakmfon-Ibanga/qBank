@@ -60,7 +60,11 @@ const Home = ({ session }) => {
   const handleLogout = async () => {
     setIsLoggingOut(true);
     try {
-      await supabase.auth.signOut();
+      const { error } = await supabase.auth.signOut();
+
+      if (error) throw error;
+      
+      sessionStorage.removeItem("session");
     } finally {
       setIsLoggingOut(false);
     }
