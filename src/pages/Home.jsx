@@ -63,8 +63,11 @@ const Home = ({ session }) => {
       const { error } = await supabase.auth.signOut();
 
       if (error) throw error;
-      
+
+      // Clear session storage
       sessionStorage.removeItem("session");
+      setSession(null);
+      navigate("/signin");
     } finally {
       setIsLoggingOut(false);
     }

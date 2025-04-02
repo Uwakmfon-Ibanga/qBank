@@ -57,13 +57,14 @@ function App  () {
     return () => {
       listener.subscription.unsubscribe();
     };
-  }, [navigate]);
+  }, []);
 
   return (
     <Routes>
       <Route path="/" element={session ? <Home /> : <SignIn />} />
       {session && <Route path="/home" element={<Home session={session} />}  />}
       <Route path="/signin" element={<SignIn  />} />
+      <Route path="/signup" element={<SignUp  />} />
       {/* <Route path="*" element={<PageNotFound />} />  */}
     </Routes>
   );
