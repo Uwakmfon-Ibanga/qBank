@@ -96,7 +96,7 @@ const Home = ({ session }) => {
         {error && <p>{error}</p>}
 
         {questions && (
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 p-3">
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-6 p-3">
             {questions.map((question, id) => (
               <Card question={question} key={id} />
             ))}
