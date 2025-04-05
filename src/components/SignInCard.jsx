@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import { HiEye } from "react-icons/hi";
 import { HiEyeOff } from "react-icons/hi";
-import { FaGoogle } from "react-icons/fa";
 import supabase from "../config/supabaseClient";
 import { Link, useNavigate } from "react-router-dom";
+import GoogleButton from "./GoogleButton";
 
 const SignInCard = () => {
     const [password, setPasspword] = useState("");
@@ -80,9 +80,7 @@ const SignInCard = () => {
             </button>
           </div>
     
-          <button className="cursor-pointer">
-            <FaGoogle size={25} />
-          </button>
+          <GoogleButton />
     
 
            
