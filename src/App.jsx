@@ -7,6 +7,7 @@ import { Route, Routes, useNavigate } from "react-router-dom";
 import Home from "./pages/Home";
 import SignIn from "./pages/SignIn";
 import SignUp from "./pages/SignUp";
+import Update from "./pages/Update";
 
 function App  () {
   const [session, setSession] = useState(null);
@@ -65,6 +66,7 @@ function App  () {
       {session && <Route path="/home" element={<Home session={session} />}  />}
       <Route path="/signin" element={<SignIn  />} />
       <Route path="/signup" element={<SignUp  />} />
+      <Route path="/update" element={<Update  />} />
       {/* <Route path="*" element={<PageNotFound />} />  */}
     </Routes>
   );
