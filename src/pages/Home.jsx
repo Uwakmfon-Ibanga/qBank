@@ -8,7 +8,6 @@ const Home = ({ session }) => {
   const [loading, setLoading] = useState(true);
 
   const [inputValue, setInputValue] = useState("");
-  console.log(session);
 
   const [error, setError] = useState(null);
   const [questions, setQuestions] = useState(null);
@@ -82,7 +81,6 @@ const Home = ({ session }) => {
         log out
       </button>
       <section className="flex flex-col min-h-screen items-center pt-[5rem] self-center gap-4">
-        <h1>welcome {session.user.email}</h1>
         <h1>search</h1>
         <input
           className="bg-gray-100 border-2"
