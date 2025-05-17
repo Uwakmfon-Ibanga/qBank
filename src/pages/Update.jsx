@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useState } from "react";
 import supabase from "../config/supabaseClient";
 
@@ -7,13 +7,18 @@ const Update = () => {
   const [courseTitle, setCourseTitle] = useState("");
   const [courseCode, setCourseCode] = useState("");
   const [courseLecturer, setCourseLecturer] = useState("");
-  const [year, setYear] = useState("");
+  const [session, setSession] = useState("");
+  const [yearOfExam, setYearOfExam] = useState("");
   const [imageFile, setImageFile] = useState(null);
 
 
   // function to handle image upload
-  async function uploadImage(image, courseCode, year) {
-    const fileName = `${courseCode} - ${year}.jpg`
+  async function uploadImage(imageFile, courseCode, year) {
+    const fileExt = imageFile.name.slice(
+    Math.max(0, imageFile.name.lastIndexOf(".")));
+    console.log(fileExt);
+    const fileName = `${courseCode}-${yearOfExam}${fileExt}`
+    console.log(fileName);
 
     const {data, error} = await supabase
     .storage
@@ -26,31 +31,28 @@ const Update = () => {
     }
 
     // getting the public url of the uploaded image
-    const {data: {publicUrl}} = supabase.storage
+    const {data: {publicUrl}} = supabase
+    .storage
     .from('cms-images')
-    .getPublicUrl(fileName)
+    .getPublicUrl(fileName);
+   
 
-    return publicUrl
+    return fileName;
   }
 
 
-
+// submitting the form
   const handleSubmit = async (e) => {
     e.preventDefault()
 
     try {
       // upload the image and get its URL
-      const imageUrl = await uploadImage(imageFile, courseCode, year);
-
-      if (!imageUrl) {
-        throw new Error("Image upload failed");
-      }
+      const fileName = await uploadImage(imageFile, courseCode, session);
     
-
           // Then insert the data including the image URL
     const {data, error} = await supabase
     .from('cms')
-    .insert({courseTitle, courseCode, courseLecturer, year, imageUrl})
+    .insert({courseTitle, courseCode, courseLecturer, year: session, image_url: fileName})
     .select();
 
     if(error) {
@@ -63,12 +65,12 @@ const Update = () => {
         setCourseTitle("");
         setCourseCode("");
         setCourseLecturer("");
-        setYear("");
+        setSession("");
         setImageFile(null);
         alert("Data submitted successfully!");
     }
     } catch (error) {
-      console.error('error:', error);
+      console.error('error:', error.message);
       alert('An error occured:', error)
     }
 
@@ -86,7 +88,7 @@ const Update = () => {
 
       <h2 className="font-bold text-xl">Add Exam Question Here</h2>
         <label className="flex flex-col">
-          Course Lecturer
+          Course Title
           <input
             className="bg-gray-200 p-2 w-[13rem] sm:w-[21rem]"
             type="text"
@@ -128,14 +130,28 @@ const Update = () => {
         </label>
 
         <label className="flex flex-col">
-          Year
+          session
           <input
             className="bg-gray-200 p-2 w-[13rem] sm:w-[21rem]"
             type="text"
             placeholder="2020/2021"
-            value={year}
+            value={session}
             onChange={(e) => {
-              setYear(e.target.value);
+              setSession(e.target.value);
+            }}
+            required
+          />
+        </label>
+
+        <label className="flex flex-col">
+          Year of exam
+          <input
+            className="bg-gray-200 p-2 w-[13rem] sm:w-[21rem]"
+            type="text"
+            placeholder="2020"
+            value={yearOfExam}
+            onChange={(e) => {
+              setYearOfExam(e.target.value);
             }}
             required
           />
@@ -148,7 +164,7 @@ const Update = () => {
             type="file"
             accept="image/jpeg"
             onChange={handleImageChange}
-            required
+            // required
           />
           <p className="font-extralight text-xs">please make sure to upload a jpg</p>
         </label>
