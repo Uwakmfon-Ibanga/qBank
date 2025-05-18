@@ -16,9 +16,7 @@ const Update = () => {
   async function uploadImage(imageFile, courseCode, year) {
     const fileExt = imageFile.name.slice(
     Math.max(0, imageFile.name.lastIndexOf(".")));
-    console.log(fileExt);
     const fileName = `${courseCode}-${yearOfExam}${fileExt}`
-    console.log(fileName);
 
     const {data, error} = await supabase
     .storage
@@ -40,12 +38,38 @@ const Update = () => {
     return fileName;
   }
 
+  //function to check if a question for a certain year is already uploaded
+  async function checkIfQuestionExists(courseCode, year) {
+    const {data, error} = await supabase
+    .from('cms')
+    .select('*')
+    .eq('courseCode', courseCode)
+    .eq('year', year)
+
+    if (error) {
+      console.error('error',error.message);
+      return false;
+    }
+
+    if (data.length > 0) {
+      alert(`Question already exists for ${courseCode} in ${year}`);
+      return true;
+    }
+    return false;
+  }
+
 
 // submitting the form
   const handleSubmit = async (e) => {
     e.preventDefault()
 
     try {
+      const exists = await checkIfQuestionExists(courseCode, session)
+
+      if(exists){
+        return
+      }
+
       // upload the image and get its URL
       const fileName = await uploadImage(imageFile, courseCode, session);
     
@@ -113,6 +137,7 @@ const Update = () => {
             }}
             required
           />
+          <p className="text-xs text-red-600">All Caps with Spacing as seen!</p>
         </label>
 
         <label className="flex flex-col">
@@ -147,7 +172,7 @@ const Update = () => {
           Year of exam
           <input
             className="bg-gray-200 p-2 w-[13rem] sm:w-[21rem]"
-            type="text"
+            type="number"
             placeholder="2020"
             value={yearOfExam}
             onChange={(e) => {
